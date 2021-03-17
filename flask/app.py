@@ -34,10 +34,14 @@ def login():
 def home():
   error = None
   if request.method == 'POST':
-    user = User.query.filter_by(email=request.form['username']).first()
-    if user.password == request.form['password']:
-      login_user(user, remember=True)
-      return render_template('index.html') 
+    users = User.query.filter_by(email=request.form['username'])
+    if not users.first() == None:
+      user = users.first()
+      if user.password == request.form['password']:
+        login_user(user, remember=True)
+        return render_template('index.html') 
+      else:
+        error = 'Invalid Credentials. Please try again.'
     else:
       error = 'Invalid Credentials. Please try again.'
   return render_template('login.html', error=error)

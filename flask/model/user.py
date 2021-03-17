@@ -63,7 +63,6 @@ class User(db.Model, UserMixin):
         return False
 
     def is_administrator(self):
-
         return True
 
     @login_manager.user_loader
