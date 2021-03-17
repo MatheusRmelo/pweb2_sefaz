@@ -45,38 +45,20 @@
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Usuário</h3>
+            <h3 class="card-title">Perfil</h3>
           </div>
           <!-- /.card-header -->
-          <form method="post" action="/users">
+          <form method="post" action="/roles">
             <div class="card-body">
               <div class="row" style="padding-bottom: 16px">
-                  <div class="col-md-5">
+                  <div class="col-md-4">
                       <label for="exampleInputPassword1">Name</label>
                       <input name="name" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter name" required>
                   </div>
-                  <div class="col-md-4">
-                      <label for="exampleInputEmail1">Email address</label>
-                      <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" required>
+                  <div class="col-md-8">
+                      <label for="exampleInputEmail1">Description</label>
+                      <input name="description" type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter description" required>
                   </div>
-                  <div class="col-md-3">
-                      <label for="exampleInputEmail1">Password</label>
-                      <input name="password" type="password" class="form-control" id="exampleInputEmail1" placeholder="Your password" required>
-                  </div>
-              </div>
-              <div class="row" style="padding-bottom: 16px">
-                <div class="col-md-4">
-                    <label for="exampleInputEmail1">Job Title</label>
-                    <input name="jobTitle" type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter email" required>
-                </div>
-                <div class="col-md-8">
-                    <label>Roles</label>
-                    <select name="roles" class="select2" multiple="multiple" data-placeholder="Select the roles" style="width: 100%;">
-                    {% for role in roles %}
-                    <option value="{{role.id}}">{{role.name}}</option>
-                    {% endfor %}
-                    </select>
-                </div>
               </div>
               <div class="row" style="padding-top: 16px">
                 <div class="col-md-2">
