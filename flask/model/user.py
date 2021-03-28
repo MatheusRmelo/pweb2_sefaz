@@ -5,6 +5,12 @@ from login.login_manager import login_manager
 users_roles = db.Table('users_roles',
     db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
     db.Column('role_id', db.Integer(), db.ForeignKey('roles.id')))
+# store_prices = db.Table('store_price',
+#     db.Column('store_id', db.Integer(), db.ForeignKey('prices.id')),
+#     db.Column('price_id', db.Integer(), db.ForeignKey('stores.id')))
+users_location = db.Table('user_location',
+    db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
+    db.Column('location_id', db.Integer(), db.ForeignKey('locations.id')))
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -22,6 +28,45 @@ class Role(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+# class Store(db.Model):
+#     __tablename__ = 'stores'
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(255))
+
+#     def __init__(self, name):
+#         self.name = name 
+
+#     def save(self):
+#         db.session.add(self)
+#         db.session.commit()
+
+# class PriceStore(db.Model):
+#     __tablename__ = 'prices'
+#     id = db.Column(db.Integer, primary_key=True)
+#     id_store = db.relationship('Store', secondary=store_prices, backref=db.backref('price', lazy='dynamic'))
+
+#     def __init__(self, id_store):
+#         self.id_store = id_store
+
+#     def save(self):
+#         db.session.add(self)
+#         db.session.commit()
+
+class Location(db.Model):
+    __tablename__ = 'locations'
+    id = db.Column(db.Integer(), primary_key=True)
+    latitude = db.Column(db.Integer)
+    longitude = db.Column(db.Integer)
+    user = db.relationship('Location', secondary=users_location, backref=db.backref('users', lazy='dynamic'))
+
+    def __init__(self, latitude, longitude, user):
+        self.latitude = latitude
+        self.longitude = longitude
+        self.user = user
+    def save(self):
+        db.session.add(self)
+        db.session.commit()       
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
