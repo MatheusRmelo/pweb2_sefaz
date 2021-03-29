@@ -44,7 +44,6 @@ def add_role():
   
   role = Role(name, description)
   role.save()
-
   return redirect("/roles")
 
 @user_controller.route("/roles")
@@ -73,6 +72,7 @@ def searchFirstItem(codigo):
     "raio": 15
   }
   r = requests.post(url= URL, data=json.dumps(data), headers = HEADERS)
+  result = r.json()
   cont = 0 
   if len(result) >= 10:
     cont = 10
@@ -84,9 +84,13 @@ def searchFirstItem(codigo):
     loja = {
       'price': result[i]['valUltimaVenda'],
       'name': result[i]['nomRazaoSocial'],
-      'cnpj': result[i]['numCNPJ']
+      'cnpj': result[i]['numCNPJ'],
+      'items': [result[i]['dscProduto']]
     }
-    lojas.append(loja)
+    try:
+      lojas.index(loja)
+    except:
+      lojas.append(loja)
 
   return lojas
 
@@ -102,10 +106,22 @@ def searchItemEmp(codigo, cnpj):
     "quantidadeDeDias": 3
   }
   r = requests.post(url= URL, data=json.dumps(data), headers = HEADERS)
+  try: 
+    result = r.json()
+    return {
+      'price': result['valUltimaVenda'],
+      'item': result['dscProduto']
+    }
+  except:
+    return False
 
-  return r['valUltimaVenda']
-
-
+def validStores(listStores, length):
+  newList = []
+  for i in range(len(listStores)):
+    if len(listStores[i]['items']) == length: 
+      newList.append(listStores[i])
+   
+  return newList
 
 @user_controller.route("/store", methods=['POST'])
 @login_required
@@ -116,15 +132,24 @@ def add_location():
     {'name':'feijao','codigo': '7898902735167'}
   ]
   listaMelhores = []
-  for i in len(cestaBasica):
-    if i == 1:
+  for i in cestaBasica:
+    if i['name'] == 'arroz':
       listaMelhores = searchFirstItem(i['codigo'])
     else:
       for loja in listaMelhores:
-        loja['price'] = loja['price'] + searchItemEmp(codigo, loja['cnpj']) 
+        news = searchItemEmp(i['codigo'], loja['cnpj'])
+        if news == False :
+          listaMelhores.remove(loja)
+        else:
+          loja['price'] = loja['price'] + news['price']
+          loja['items'].append(news['item'])
+
+  listaMelhores = validStores(listaMelhores, len(cestaBasica))
+
   print('---------------------------')      
   print(listaMelhores)
   print('---------------------------')      
+
   return render_template("store.html", listaMelhores = listaMelhores)
 
 @user_controller.route("/store")
