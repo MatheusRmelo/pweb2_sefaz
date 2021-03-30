@@ -51,14 +51,41 @@
     <section class="content">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
+        <div class="row" style="margin: 16px 0px;">
+            <div class="col-lg-3 col-3" style="border: 1px solid #ccc;margin: 8px;">
+                <h3>Cesta básica 1</h3>
+                <p>ARROZ INTEGRAL CAMIL 1KG</p>
+                <p>OLEO DE SOJA SOYA 900ML</p>
+                <p>FEIJ TIO VIEIRA CARIOCA PREM TP1 KG</p>
+            </div>
+            <div class="col-lg-3 col-3" style="border: 1px solid #ccc;margin: 8px;">
+                <h3>Cesta básica 2</h3>
+                <p>ARROZ INTEGRAL CAMIL 1KG</p>
+                <p>OLEO DE SOJA SOYA 900ML</p>
+                <p>FEIJ TIO VIEIRA CARIOCA PREM TP1 KG</p>
+            </div>
+            <div class="col-lg-3 col-3" style="border: 1px solid #ccc;margin: 8px;">
+              <h3>Cesta básica 3</h3>
+              <p>ARROZ INTEGRAL CAMIL 1KG</p>
+              <p>OLEO DE SOJA SOYA 900ML</p>
+              <p>FEIJ TIO VIEIRA CARIOCA PREM TP1 KG</p>
+          </div>
+        </div>
         <div class="row">
           <div class="col-lg-12 col-12" style="margin: 16px 0px;">
             <form action="/store" method="POST">
-              <input type="text" class="form-control" placeholder="latitude" name="latitude" style="margin: 8px 0px;" >
-              <input type="text" class="form-control" placeholder="longitude" name="longitude" style="margin: 8px 0px;" >
-  
-              <input type="text" class="form-control" placeholder="Localização" name="location" style="margin: 8px 0px;" >
-              <button type="submit" class="btn btn-primary btn-block">Pegar minha localização</button>
+              <input type="text" class="form-control" placeholder="latitude" id="latitude" name="latitude" style="margin: 8px 0px;" >
+              <input type="text" class="form-control" placeholder="longitude" id="longitude" name="longitude" style="margin: 8px 0px;" >
+              <select class="form-control" name="cesta" id="cesta">
+                <option value="1" selected>Cesta básica 1</option>
+                <option value="2">Cesta básica 2</option>
+                <option value="3">Cesta básica 3</option>
+              </select>
+              <div style="display: flex;margin: 64px;height: 40px;justify-content: center;">
+                <input style="height: 40px;width: 70%;" type="text" class="form-control" placeholder="Localização" name="location" style="margin: 8px 0px;" >
+                <button type="button" class="btn btn-primary"  onclick="getLocation()" style="height: 40px;">Pegar localização</button>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Buscar</button>
             </form>
           </div>
           {% for loja in listaMelhores %}
@@ -76,7 +103,9 @@
             </div>
           </div>
           {% else %}
-            <h3 style="text-align: center;">Nenhuma loja pesquisada ainda</h3>
+            <div style="display: flex;justify-content: center;align-items: center;width: 100%;">
+              <h3 style="text-align: center;">Nenhuma loja encontrada ainda</h3>
+            </div>
           {% endfor %}
         </div>
         <!-- /.row -->
@@ -131,7 +160,6 @@
 <script src="dist/js/pages/dashboard.js"></script>
 <script type="text/javascript">
   function getLocation(){
-    alert('entrou');
     if (navigator.geolocation){
         navigator.geolocation.getCurrentPosition(showPosition,showError);
     }else{
@@ -140,8 +168,11 @@
     }
   }
   function showPosition(position){
-    console.log(position.coords.latitude);
-    console.log(position.coords.longitude);
+    var latitude = document.getElementById('latitude');
+    var longitude = document.getElementById('longitude');
+
+    latitude.value = position.coords.latitude;
+    longitude.value = position.coords.longitude;
   }
 
   function showError(err){

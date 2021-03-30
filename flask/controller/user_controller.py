@@ -57,18 +57,17 @@ def roles():
 def roleForm():
   return render_template("users/role.html")
 
-def searchFirstItem(codigo):
+def searchFirstItem(codigo, latitude, longitude):
   HEADERS = {
       "appToken": '82920d4042d310a817206770bd9afa852976f129',
       "Content-Type": "application/json"
   }
   URL = 'http://api.sefaz.al.gov.br/sfz_nfce_api/api/public/consultarPrecosPorCodigoDeBarras'
-
   data = {
     "codigoDeBarras": codigo,
     "dias": 3,
-    "latitude": -9.6432331,
-    "longitude": -35.7190686,
+    "latitude": latitude,
+    "longitude": longitude,
     "raio": 15
   }
   r = requests.post(url= URL, data=json.dumps(data), headers = HEADERS)
@@ -80,6 +79,12 @@ def searchFirstItem(codigo):
     cont = len(result)
   
   lojas = []
+  print(result)
+  try:
+    valid = result[i]['valUltimaVenda']
+  except:
+    return lojas
+  
   for i in range(cont):
     loja = {
       'price': result[i]['valUltimaVenda'],
@@ -126,6 +131,8 @@ def validStores(listStores, length):
 @user_controller.route("/store", methods=['POST'])
 @login_required
 def add_location():
+  latitude = request.form['latitude']
+  longitude = request.form['longitude']
   cestaBasica = [
     {'name':'arroz','codigo':'7896006755517'},
     {'name':'oleo','codigo': '7891107101621'},
@@ -134,7 +141,7 @@ def add_location():
   listaMelhores = []
   for i in cestaBasica:
     if i['name'] == 'arroz':
-      listaMelhores = searchFirstItem(i['codigo'])
+      listaMelhores = searchFirstItem(i['codigo'], latitude, longitude)
     else:
       for loja in listaMelhores:
         news = searchItemEmp(i['codigo'], loja['cnpj'])
