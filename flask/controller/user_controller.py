@@ -134,7 +134,7 @@ def add_location():
   latitude = request.form['latitude']
   longitude = request.form['longitude']
   cesta = request.form['cesta']
-  print(cesta)
+
   cesta1 = [
     {'name':'arroz','codigo':'7896006755517'},
   ]
@@ -147,9 +147,9 @@ def add_location():
     {'name':'oleo','codigo': '7891107101621'},
     {'name':'feijao','codigo': '7898902735167'}
   ]
-  if cesta == 1:
+  if cesta == '1':
     cestaBasica = cesta1
-  elif cesta == 2:
+  elif cesta == '2':
     cestaBasica = cesta2
   else:
     cestaBasica = cesta3
