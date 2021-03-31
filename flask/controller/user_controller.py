@@ -81,7 +81,7 @@ def searchFirstItem(codigo, latitude, longitude):
   lojas = []
   print(result)
   try:
-    valid = result[i]['valUltimaVenda']
+    valid = result[0]['valUltimaVenda']
   except:
     return lojas
   
@@ -133,11 +133,27 @@ def validStores(listStores, length):
 def add_location():
   latitude = request.form['latitude']
   longitude = request.form['longitude']
-  cestaBasica = [
+  cesta = request.form['cesta']
+  print(cesta)
+  cesta1 = [
+    {'name':'arroz','codigo':'7896006755517'},
+  ]
+  cesta2 = [
+    {'name':'arroz','codigo':'7896006755517'},
+    {'name':'oleo','codigo': '7891107101621'},
+  ]
+  cesta3 = [
     {'name':'arroz','codigo':'7896006755517'},
     {'name':'oleo','codigo': '7891107101621'},
     {'name':'feijao','codigo': '7898902735167'}
   ]
+  if cesta == 1:
+    cestaBasica = cesta1
+  elif cesta == 2:
+    cestaBasica = cesta2
+  else:
+    cestaBasica = cesta3
+
   listaMelhores = []
   for i in cestaBasica:
     if i['name'] == 'arroz':
